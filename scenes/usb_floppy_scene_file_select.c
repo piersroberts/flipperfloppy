@@ -3,15 +3,21 @@
 static bool usb_floppy_file_select(UsbFloppyApp* app) {
     furi_assert(app);
 
-    DialogsFileBrowserOptions browser_options;
+    // Firmware forks such as RogueMaster add fields to the end of DialogsFileBrowserOptions,
+    // and their dialog_file_browser_set_basic_options writes them. Leave zeroed room for
+    // those, or it writes past the struct and over the stack.
+    union {
+        DialogsFileBrowserOptions options;
+        uint8_t room[sizeof(DialogsFileBrowserOptions) + 32];
+    } browser = {0};
     dialog_file_browser_set_basic_options(
-        &browser_options, USB_FLOPPY_APP_EXTENSION, &I_floppy_10px);
-    browser_options.base_path = USB_FLOPPY_APP_PATH_FOLDER;
-    browser_options.hide_ext = false;
+        &browser.options, USB_FLOPPY_APP_EXTENSION, &I_floppy_10px);
+    browser.options.base_path = USB_FLOPPY_APP_PATH_FOLDER;
+    browser.options.hide_ext = false;
 
     // Input events and views are managed by file_select
     return dialog_file_browser_show(
-        app->dialogs, app->file_path, app->file_path, &browser_options);
+        app->dialogs, app->file_path, app->file_path, &browser.options);
 }
 
 void usb_floppy_scene_file_select_on_enter(void* context) {
