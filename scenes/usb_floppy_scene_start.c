@@ -11,6 +11,8 @@ static void usb_floppy_item_select(void* context, uint32_t index) {
     UsbFloppyApp* app = context;
     if(index == 0) {
         view_dispatcher_send_custom_event(app->view_dispatcher, UsbFloppyCustomEventFileSelect);
+    } else if(index == 3) {
+        view_dispatcher_send_custom_event(app->view_dispatcher, UsbFloppyCustomEventAbout);
     }
 }
 
@@ -51,6 +53,8 @@ void usb_floppy_scene_start_on_enter(void* context) {
     variable_item_set_current_value_index(item, app->write_protect);
     variable_item_set_current_value_text(item, write_protect_names[app->write_protect]);
 
+    variable_item_list_add(app->variable_item_list, "About", 0, NULL, NULL);
+
     variable_item_list_set_enter_callback(app->variable_item_list, usb_floppy_item_select, app);
     view_dispatcher_switch_to_view(app->view_dispatcher, UsbFloppyAppViewStart);
 }
@@ -61,6 +65,9 @@ bool usb_floppy_scene_start_on_event(void* context, SceneManagerEvent event) {
     if(event.type == SceneManagerEventTypeCustom) {
         if(event.event == UsbFloppyCustomEventFileSelect) {
             scene_manager_next_scene(app->scene_manager, UsbFloppySceneFileSelect);
+            return true;
+        } else if(event.event == UsbFloppyCustomEventAbout) {
+            scene_manager_next_scene(app->scene_manager, UsbFloppySceneAbout);
             return true;
         }
     }

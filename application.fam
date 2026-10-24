@@ -9,7 +9,7 @@ App(
     ],
     stack_size=2 * 1024,
     fap_description="Emulates a USB floppy drive (UFI) from a 720K or 1.44M disk image",
-    fap_version="0.1.1",
+    fap_version="0.1.2",
     fap_icon="assets/floppy_10px.png",
     fap_icon_assets="assets",
     fap_category="USB",

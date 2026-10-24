@@ -55,6 +55,7 @@ enum UsbFloppyCustomEvent {
     UsbFloppyCustomEventEject,
     UsbFloppyCustomEventConnectionError,
     UsbFloppyCustomEventFileSelect,
+    UsbFloppyCustomEventAbout,
 };
 
 void usb_floppy_app_show_loading_popup(UsbFloppyApp* app, bool show);
