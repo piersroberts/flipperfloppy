@@ -1,0 +1,3 @@
+# ufbt build output with absolute local paths
+.vscode/
+dist/debug/
